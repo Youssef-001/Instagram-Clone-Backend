@@ -1,7 +1,7 @@
 # Instaclone 📸
 A social media platform inspired by Instagram. Users can share posts, like, comment, and follow others.
 
-** Link to Design Document ** : https://docs.google.com/document/d/1m5-r7Kl_IPv0Pn-jE2xdMstcGhx50hBvOE2cz1NY0TI/edit?usp=sharing
+**Link to Design Document** : https://docs.google.com/document/d/1m5-r7Kl_IPv0Pn-jE2xdMstcGhx50hBvOE2cz1NY0TI/edit?usp=sharing
 
 ## 🛠 Tech Stack
 - **Backend:** Node.js, Express, TypeScript, Prisma, PostgreSQL
