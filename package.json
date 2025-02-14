@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/Youssef-001/Instagram-Clone-Backend#readme",
   "devDependencies": {
+    "@types/express": "^5.0.0",
     "@types/node": "^22.13.2",
     "nodemon": "^3.1.9",
     "prisma": "^6.3.1",
