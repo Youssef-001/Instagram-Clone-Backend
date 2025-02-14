@@ -1,10 +1,11 @@
-export class AppError extends Error {
-    statusCode: number;
+class AppError extends Error {
   
-    constructor(message: string, statusCode: number) {
+    constructor(message, statusCode) {
       super(message); // Call the Error class constructor
       this.statusCode = statusCode;
 
       Object.setPrototypeOf(this, AppError.prototype);
     }
   }
+
+  module.exports = AppError;

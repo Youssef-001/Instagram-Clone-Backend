@@ -1,20 +1,17 @@
 const express = require('express');
-const cors = require('cors');
+const cors = require('cors'); // Fix incorrect import
+const errorHandler = require('./middlewares/errorMiddleware.js');
+
+
 const app = express();
-const errorHandler = require('./middlewares/errorMiddleware.ts');
 app.use(cors());
 
 
 console.log("Error Handler Type:", typeof errorHandler); // Should print "function"
 
-
-const authenticationRouter = require('./routes/auth.ts')
+const authenticationRouter = require('./routes/auth.js')
 
 app.use('/auth', authenticationRouter);
-
-app.get('/', (req: any, res: any) => {
-  res.send('Hello World!');
-});
 
 
 
