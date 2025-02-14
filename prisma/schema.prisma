@@ -1,0 +1,125 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  username      String   @unique
+  posts     Post[]
+  comments Comment[]
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+  sentNotifications     Notification[] @relation("SentNotifications")
+  receivedNotifications Notification[] @relation("ReceivedNotifications")
+  likes     Like[] 
+  followers Follow[] @relation("Followers")
+  following Follow[] @relation("Following")
+  avatar String? 
+  bio String?
+  createdAt DateTime @default(now())
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  content   String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments Comment[]
+  images Image[]
+  likes     Like[] 
+
+  authorId  String
+  createdAt DateTime @default(now())
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  author    User     @relation(fields: [authorId], references: [id],onDelete: Cascade)
+  authorId  String
+  post      Post     @relation(fields: [postId], references: [id],onDelete: Cascade)
+  postId    String
+  parentId  String?  // Nullable for top-level comments
+  parent    Comment? @relation("ParentComment", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   Comment[] @relation("ParentComment") // One-to-many relationship for replies
+
+  createdAt DateTime @default(now())
+}
+
+model Image {
+  id        String   @id @default(cuid())
+  url       String
+  createdAt DateTime @default(now())
+  postId String
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+
+model Message {
+
+  id String @id @default(cuid())
+  senderId String
+  receiverId String
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+
+
+}
+
+model Notification {
+  id       String   @id @default(cuid())
+  type      NotificationType
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  userId    String
+  senderId    String
+  user      User             @relation("ReceivedNotifications", fields: [userId], references: [id])
+  sender    User             @relation("SentNotifications", fields: [senderId], references: [id])
+}
+
+
+model Like {
+  id        String   @id @default(cuid())
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId]) // Ensures a user can only like a post once
+}
+
+
+model Follow {
+  id        String   @id @default(cuid())
+  followerId String
+  followingId String
+  createdAt DateTime @default(now())
+
+  follower   User     @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
+  following  User     @relation("Followers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId]) // Ensures a user can only follow another user once
+}
+
+
+
+enum NotificationType {
+  LIKE
+  COMMENT
+  FOLLOW
+  MESSAGE
+}
