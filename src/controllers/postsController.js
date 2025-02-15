@@ -2,7 +2,10 @@
 
 async function createPost(req,res,next)
 {
-res.send('hi')
+    const content = req.body.content;
+    const image = req.file;
+
+    
 }
 
 module.exports = {createPost}

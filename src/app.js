@@ -11,6 +11,9 @@ app.use(express.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+console.log(__dirname);
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
 
 console.log("Error Handler Type:", typeof errorHandler); 
 
