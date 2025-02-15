@@ -1,4 +1,3 @@
-const { Request, Response, NextFunction } = require("express");
 const AppError = require("../utils/AppError.js");
 
 const errorHandler = (err ,req, res, next) => {

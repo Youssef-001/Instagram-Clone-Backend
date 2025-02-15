@@ -18,6 +18,7 @@ model User {
   id        String   @id @default(cuid())
   email     String   @unique
   username      String   @unique
+  bdate DateTime
   posts     Post[]
   comments Comment[]
   sentMessages     Message[] @relation("SentMessages")

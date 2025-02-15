@@ -5,9 +5,10 @@ const errorHandler = require('./middlewares/errorMiddleware.js');
 
 const app = express();
 app.use(cors());
+app.use(express.urlencoded({ extended: false }));
 
 
-console.log("Error Handler Type:", typeof errorHandler); // Should print "function"
+console.log("Error Handler Type:", typeof errorHandler); 
 
 const authenticationRouter = require('./routes/auth.js')
 
