@@ -3,24 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Submit Post</title>
 </head>
 <body>
 
-    <form action="http://localhost:3000/posts" method="POST" enctype="multipart/form-data">
+    <h1>Create a Post</h1>
 
+    <!-- Form with content input and file input -->
+    <form id="postForm" method="POST" enctype="multipart/form-data">
         <div>
-            <label for="content" name="content">Content: </label>
-            <input type="text" id="content" name="content">
+            <label for="content">Content: </label>
+            <input type="text" id="content" name="content" required>
         </div>
-
         <div>
-            <label for="avatar" name="avatar">Image: </label>
+            <label for="avatar">Image: </label>
             <input type="file" id="avatar" name="avatar">
         </div>
-
-        <button type="submit">Submit post</button>
+        <button type="submit">Submit Post</button>
     </form>
-    
+
+    <script>
+        // Attach event listener to the form
+        document.getElementById('postForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent the form from submitting normally
+            
+            const formData = new FormData(this); // Get form data
+            
+            // Create the fetch request
+            fetch('/posts', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNtNzVzYmg1MTAwMDB5cTA0aml5endncWQiLCJ1c2VybmFtZSI6Inl1c2VmMHgzIiwiaWF0IjoxNzM5NjA0MTc0LCJleHAiOjE3Mzk2MDc3NzR9.ta-7svXokZesOVflSLznYHVQSyMLpdXlE5VacMpKcYo'  // Add Authorization header
+                },
+                body: formData // Send the form data as the body
+            })
+            .then(response => response.json())  // Assuming the server returns JSON
+            .then(data => {
+                console.log('Post created:', data);
+                // You can handle the response here (e.g., show success message)
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+
 </body>
 </html>
