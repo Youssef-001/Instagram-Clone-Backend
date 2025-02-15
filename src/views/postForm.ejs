@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <form action="http://localhost:3000/posts" method="POST" enctype="multipart/form-data">
+
+        <div>
+            <label for="content" name="content">Content: </label>
+            <input type="text" id="content" name="content">
+        </div>
+
+        <div>
+            <label for="avatar" name="avatar">Image: </label>
+            <input type="file" id="avatar" name="avatar">
+        </div>
+
+        <button type="submit">Submit post</button>
+    </form>
+    
+</body>
+</html>

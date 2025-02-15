@@ -1,18 +1,23 @@
 const express = require('express');
 const cors = require('cors'); // Fix incorrect import
 const errorHandler = require('./middlewares/errorMiddleware.js');
-
+const path = require('path');
+const authenticationRouter = require('./routes/auth.js')
+const postsRouter = require('./routes/posts.js');
 
 const app = express();
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 
 console.log("Error Handler Type:", typeof errorHandler); 
 
-const authenticationRouter = require('./routes/auth.js')
 
 app.use('/auth', authenticationRouter);
+app.use('/posts', postsRouter);
+
 
 
 
