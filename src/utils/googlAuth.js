@@ -6,9 +6,10 @@ const prisma = new PrismaClient()
 const passport = require('passport');
 require('dotenv').config();
 const GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
-
+const jwt = require('jsonwebtoken');
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+require('dotenv').config();
 passport.use(new GoogleStrategy({
     clientID:     GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
@@ -16,7 +17,7 @@ passport.use(new GoogleStrategy({
     passReqToCallback   : true
   },
   async function(request, accessToken, refreshToken, profile, done) {
-   const existingUser =  await prisma.user.findUnique({
+   const user =  await prisma.user.findUnique({
         where: {
             googleId: profile.id
         }
@@ -25,9 +26,9 @@ passport.use(new GoogleStrategy({
     console.log(profile);
 
 
-    if (!existingUser)
+    if (!user)
     {
-        const user = await prisma.user.create({
+         user = await prisma.user.create({
             data: {
                 googleId: profile.id,
                 email: profile.email,
@@ -35,9 +36,19 @@ passport.use(new GoogleStrategy({
             }
         })
     }
-    return done(null, profile);
+        const jwtToken = jwt.sign(
+            { userId: user.id, email: user.email, name:user.username }, // Payload (you can include any user info)
+            process.env.JWT_SECRET, // Secret key
+            { expiresIn: '1h' } // Expiry time (e.g., 1 hour)
+        );
+        
+        return done(null, {user,jwtToken});
+    
   }
 ));
+
+
+
 
 
 passport.serializeUser(function(user, done) {
