@@ -23,7 +23,27 @@ async function createUser(email, username, bdate ,password) {
    
 }
 
+async function findUserByEmail(email)
+{
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                email: email
+            }
+        });
+
+        if (!user) {
+            return null; // Return null instead of throwing inside the service
+        }
+        return user;
+    }
+    catch(err)
+    {
+        throw new AppError("Database error", 500);
+    }
+}
 
 
-module.exports = {createUser}
+
+module.exports = {createUser,findUserByEmail}
 
