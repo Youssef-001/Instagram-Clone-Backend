@@ -12,7 +12,8 @@ async function createPost(req,res,next)
     }
 
     try {
-        const post = await postService.createPost(req.user.id, content, image.filename);
+        const post = await postService.createPost(req.user.id, content);
+        await postService.uploadImage(post.id, image.path);
         res.status(200).json(post);
     }
     catch(err)

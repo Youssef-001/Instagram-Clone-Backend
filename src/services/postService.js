@@ -4,7 +4,7 @@ const AppError = require('../utils/AppError.js');
 const prisma = new PrismaClient()
 
 
-async function createPost(id, content, image) {
+async function createPost(id, content) {
     try {
         const post = await prisma.post.create({
             data: {
@@ -20,4 +20,18 @@ async function createPost(id, content, image) {
     }
 }
 
-module.exports = {createPost};
+async function uploadImage(postId, url) {
+    try {
+        const image = await prisma.image.create({
+            data: {
+                postId: postId,
+                url: url
+            }
+        })
+    }catch(err)
+    {
+        throw new AppError(err.message, 400);
+    }
+}
+
+module.exports = {createPost, uploadImage};
