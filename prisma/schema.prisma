@@ -19,6 +19,7 @@ model User {
   email     String   @unique
   username      String   @unique
   bdate DateTime
+  password String  
   posts     Post[]
   comments Comment[]
   sentMessages     Message[] @relation("SentMessages")
