@@ -59,4 +59,40 @@ async function followUser(senderId, receiverId) {
     }
 }
 
-module.exports = {followUser}
+
+async function unfollowUser(senderId, receiverId) {
+
+    try {
+        // Check if following
+        const existingFollow = await prisma.follow.findUnique({
+            where: {
+                followerId_followingId: {
+                    followerId: senderId,
+                    followingId: receiverId
+                }
+            }
+        });
+
+        if (!existingFollow) {
+            throw new AppError("User is not being followed", 404);
+        }
+
+        await prisma.follow.delete({
+            where: {
+                followerId_followingId: {
+                    followerId: senderId,
+                    followingId: receiverId
+                }
+            }
+        });
+
+        return {
+            status: "success",
+            message: "User successfully unfollowed"
+        };
+    } catch (err) {
+        throw new AppError(err.message, err.statusCode || 400);
+    }
+}
+
+module.exports = {followUser,unfollowUser}

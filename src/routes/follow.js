@@ -8,6 +8,9 @@ router.post('/:senderId/:receiverId', verifyJWT, (req,res,next) => {
     followController.followUser(req,res,next);
 })
 
+router.delete('/:senderId/:receiverId', verifyJWT, (req,res,next) => {
+    followController.unfollowUser(req,res,next);
+})
 
 module.exports = router;
 
