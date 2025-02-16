@@ -34,4 +34,24 @@ async function uploadImage(postId, url) {
     }
 }
 
-module.exports = {createPost, uploadImage};
+async function getUserPosts(userId)
+{
+
+    try {
+        const posts = await prisma.post.findMany({
+            where: {
+                authorId: userId
+            }
+        })
+
+        return posts;
+    }
+
+    catch(err)
+    {
+        throw new AppError(err.message, 400);
+    }
+
+}
+
+module.exports = {createPost, uploadImage, getUserPosts};

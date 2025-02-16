@@ -12,7 +12,7 @@ async function createPost(req,res,next)
     }
 
     try {
-        const post = await postService.createPost(req.user.id, content);
+        const post = await postService.createPost(req.user.userId, content);
         await postService.uploadImage(post.id, image.path);
         res.status(200).json(post);
     }
@@ -23,4 +23,11 @@ async function createPost(req,res,next)
 
 }
 
-module.exports = {createPost}
+async function getUserPosts(req,res,next)
+{
+    const userId = req.params.userId
+    const posts = await postService.getUserPosts(userId);
+    res.status(200).json(posts);
+}
+
+module.exports = {createPost, getUserPosts}
