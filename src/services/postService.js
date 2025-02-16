@@ -34,24 +34,35 @@ async function uploadImage(postId, url) {
     }
 }
 
-async function getUserPosts(userId)
-{
-
+async function getUserPosts(userId) {
     try {
-        const posts = await prisma.post.findMany({
+        const user = await prisma.user.findUnique({
             where: {
-                authorId: userId
+                id: userId
+            },
+            select: {
+                id: true,
+                username: true,
+                email: true, // Specify only the user fields you need
+                avatar: true,
+                posts: {
+                    select: {
+                        id: true,
+                        content: true,
+                        createdAt: true
+                    }
+                }
             }
-        })
+        });
 
-        return posts;
-    }
+        if (!user) {
+            throw new AppError("User not found", 404);
+        }
 
-    catch(err)
-    {
+        return user;
+    } catch (err) {
         throw new AppError(err.message, 400);
     }
-
 }
 
 module.exports = {createPost, uploadImage, getUserPosts};
