@@ -43,13 +43,18 @@ async function getUserPosts(userId) {
             select: {
                 id: true,
                 username: true,
-                email: true, // Specify only the user fields you need
+                email: true,
                 avatar: true,
                 posts: {
                     select: {
                         id: true,
                         content: true,
-                        createdAt: true
+                        createdAt: true,
+                        images: {  // Include images for each post
+                            select: {
+                                url: true,
+                            }
+                        }
                     }
                 }
             }
