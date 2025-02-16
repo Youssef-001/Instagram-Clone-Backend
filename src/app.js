@@ -4,6 +4,7 @@ const errorHandler = require('./middlewares/errorMiddleware.js');
 const path = require('path');
 const authenticationRouter = require('./routes/auth.js')
 const postsRouter = require('./routes/posts.js');
+const followRouter = require('./routes/follow.js');
 const passport = require('passport');
 const session = require('express-session');
 
@@ -21,6 +22,7 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 app.use('/auth', authenticationRouter);
 app.use('/posts', postsRouter);
+app.use('/follow', followRouter);
 
 
 

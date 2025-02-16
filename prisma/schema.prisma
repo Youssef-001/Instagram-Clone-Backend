@@ -76,8 +76,6 @@ model Message {
   receiverId String
   sender     User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
   receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
-
-
 }
 
 model Notification {
