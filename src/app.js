@@ -5,10 +5,11 @@ const path = require('path');
 const authenticationRouter = require('./routes/auth.js')
 const postsRouter = require('./routes/posts.js');
 const passport = require('passport');
-
+const session = require('express-session');
 
 
 const app = express();
+app.use(session({'secret':'cats'}));
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');
@@ -16,7 +17,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 
-console.log("Error Handler Type:", typeof errorHandler); 
 
 
 app.use('/auth', authenticationRouter);
@@ -26,4 +26,4 @@ app.use('/posts', postsRouter);
 
 
 app.use(errorHandler);
-app.listen(3001, () => {});
+app.listen(3000, () => {});

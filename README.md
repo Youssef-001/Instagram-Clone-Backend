@@ -13,9 +13,9 @@ A social media platform inspired by Instagram. Users can share posts, like, comm
 ## 🚀 Features
 
 ### 🔐 Authentication & Security
-- [ ] User signup, login, and logout using JWT-based authentication.
-- [ ] OAuth2 social login with Google.
-- [ ] Secure password hashing and session management.
+- [✅] User signup, login, and logout using JWT-based authentication.
+- [✅] OAuth2 social login with Google.
+- [✅] Secure password hashing and session management.
 
 ### 👥 User Profiles & Social Features
 - [ ] User profiles with bio, profile picture, and posts.
