@@ -17,6 +17,15 @@ router.get('/:userId', (req,res,next) => {
     postsController.getUserPosts(req,res,next);
 })
 
+router.get('/feed/:userId', (req, res, next) => {
+    const { userId } = req.params;
+    const { cursor, limit } = req.query;
+
+    // Default limit to 10 posts per request
+    const pageSize = parseInt(limit) || 10;
+    postsController.getFeed(req, res, next, { userId, cursor, pageSize });
+});
+
 module.exports = router;
 
 

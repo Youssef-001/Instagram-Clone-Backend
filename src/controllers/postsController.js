@@ -2,6 +2,8 @@
 
 const AppError = require('../utils/AppError.js');
 const postService = require('../services/postService.js');
+const prisma = require('@prisma/client');
+const prismaClient = new prisma.PrismaClient();
 async function createPost(req,res,next)
 {
     const content = req.body.content || "";
@@ -30,4 +32,30 @@ async function getUserPosts(req,res,next)
     res.status(200).json(posts);
 }
 
-module.exports = {createPost, getUserPosts}
+
+const getFeed = async (req, res, next, { userId, cursor, pageSize }) => {
+    try {
+        // Fetch the list of users this user follows
+        const posts = await postService.getFeed(userId,cursor,pageSize)
+        console.log(userId)
+
+        // Check if there's a next cursor
+        let nextCursor = null;
+        if (posts.length > pageSize) {
+            const nextPost = posts.pop(); // Remove the extra post
+            nextCursor = nextPost.createdAt.toISOString(); // Use its timestamp as next cursor
+        }
+
+        // Send response with next cursor
+        console.log('there, ', posts)
+        res.json({
+            posts,
+            nextCursor, // Send this to the client for the next request
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+module.exports = {createPost, getUserPosts, getFeed}
