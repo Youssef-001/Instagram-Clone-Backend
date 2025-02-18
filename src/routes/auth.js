@@ -31,10 +31,8 @@ router.get('/google-auth', passport.authenticate('google', { scope: ['profile', 
 router.get('/google/callback', passport.authenticate('google', {
     failureRedirect: '/auth/failure',
 }), (req, res) => {
-    // Assuming user is authenticated successfully
     const { jwtToken } = req.user;
 
-    // Send the JWT token back to the client
     res.json({ message: 'Authentication successful', token: jwtToken });
 });
 
@@ -45,25 +43,6 @@ router.get('/failture', (req,res) => {
 router.get('/protected',verifyJWT, (req,res) => {
     res.send("You are authenticated with google");
 })
-
-
-// router.get('/google/logout', (req, res) => {
-//     req.logout(function(err) {
-//         if (err) {
-//             return res.status(500).send('Logout failed');
-//         }
-//         // Destroy session
-//         req.session.destroy(function(err) {
-//             if (err) {
-//                 return res.status(500).send('Session destruction failed');
-//             }
-//             // Optionally clear the cookie
-//             res.clearCookie('connect.sid'); // Replace with the actual cookie name if it's different
-//             res.send("You are logged out");
-//         });
-//     });
-// });
-
 
 
 module.exports = router;

@@ -3,7 +3,7 @@ const multer  = require('multer')
 const upload = multer({ dest: 'uploads/' })
 const postsController = require('../controllers/postsController.js');
 const verifyJWT = require('../middlewares/verifyJwt.js');
-
+const commentController = require('../controllers/commentController.js');
 router.post('/', verifyJWT,upload.single('avatar'), (req, res, next) => {
 
     postsController.createPost(req,res, next);
@@ -25,6 +25,13 @@ router.get('/feed/:userId', (req, res, next) => {
     const pageSize = parseInt(limit) || 10;
     postsController.getFeed(req, res, next, { userId, cursor, pageSize });
 });
+
+
+router.post('/:postId/comments', verifyJWT, (req,res, next) => {
+    commentController.createComment(req,res,next)
+})
+
+
 
 module.exports = router;
 
