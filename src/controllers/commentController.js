@@ -1,6 +1,7 @@
 const AppError = require('../utils/AppError.js');
 const commentService = require('../services/commentService.js');
-
+const postController = require('../controllers/postsController.js');
+const postService = require('../services/postService.js');
 async function createComment(req, res, next) {
     const postId = req.params.postId;
     const content = req.body.content;
@@ -37,4 +38,31 @@ async function getComments(req,res,next)
     }
 }
 
-module.exports = { createComment, getComments };
+
+async function deleteComment(req,res,next)
+{
+    const commentId = req.params.commentId;
+    const userId = req.user.userId;
+    const postId = req.params.postId;
+    // either userId the same as deleted commentId
+    // or userId is the author of the post
+
+    const post = await postService.getPost(postId);
+    const comment = await commentService.getComment(commentId);
+
+    if (userId !== comment.author.id && userId !== post.author.id)
+    {
+        return next(new AppError("You are not authorized to delete this comment", 403));
+    }
+
+    try {
+        const comment = await commentService.deleteComment(commentId);
+        res.status(200).json({ message: "Comment deleted successfully", comment });
+    }
+    catch(err)
+    {
+        next(new AppError(err.message || "Something went wrong", err.statusCode || 500));
+    }
+}
+
+module.exports = { createComment, getComments, deleteComment };

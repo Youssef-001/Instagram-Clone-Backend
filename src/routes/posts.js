@@ -26,6 +26,9 @@ router.get('/feed/:userId', (req, res, next) => {
     postsController.getFeed(req, res, next, { userId, cursor, pageSize });
 });
 
+router.get('/:postId', (req,res,next) => {
+    postsController.getPost(req,res,next);
+})
 
 router.post('/:postId/comments', verifyJWT, (req,res, next) => {
     commentController.createComment(req,res,next)
@@ -33,6 +36,10 @@ router.post('/:postId/comments', verifyJWT, (req,res, next) => {
 
 router.get('/:postId/comments', verifyJWT, (req,res, next) => {
     commentController.getComments(req,res,next)
+})
+
+router.delete('/:postId/comments/:commentId', verifyJWT, (req,res,next) => {
+    commentController.deleteComment(req,res,next)
 })
 
 

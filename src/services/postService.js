@@ -112,4 +112,33 @@ const getFeed = async (userId,cursor,pageSize) => {
     return posts;
 };
 
-module.exports = {createPost, uploadImage, getUserPosts, getFeed};
+
+async function getPost(postId)
+{
+    const post = await prisma.post.findUnique({
+        where: {
+            id: postId
+        },
+
+        include: {
+            author: {
+                select:{
+                    id: true,
+                    username: true,
+                    avatar: true
+                }
+            }
+        }
+    });
+
+
+    if (!post)
+    {
+        throw new AppError("Post not found", 404);
+    }
+
+    return post;
+}
+
+
+module.exports = {createPost, uploadImage, getUserPosts, getFeed, getPost};

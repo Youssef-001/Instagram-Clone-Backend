@@ -72,4 +72,46 @@ async function getComments(postId, offSet, limit) {
     }
 }
 
-module.exports = {createComment, getComments}
+
+async function getComment(commentId)
+{
+   
+        const comment = await prisma.comment.findUnique({
+            where: {
+                id: commentId
+            },
+            include: {
+                author: {
+                    select: {
+                        id: true,
+                        username: true,
+                        avatar: true
+                    }
+                }
+            }
+        })
+
+        if (!comment) {
+            throw new AppError("Comment not found", 404);
+        }
+    return comment;
+}
+
+
+async function deleteComment(commentId)
+{
+    try {
+        const comment = await prisma.comment.delete({
+            where: {
+                id: commentId
+            }
+        });
+        return comment;
+    }
+    catch(err)
+    {
+        throw new AppError(err.message, 400);
+    }
+}
+
+module.exports = {createComment, getComments, getComment, deleteComment}

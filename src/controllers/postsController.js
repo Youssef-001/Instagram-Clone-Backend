@@ -3,6 +3,7 @@
 const AppError = require('../utils/AppError.js');
 const postService = require('../services/postService.js');
 const prisma = require('@prisma/client');
+const { post } = require('../routes/posts.js');
 const prismaClient = new prisma.PrismaClient();
 async function createPost(req,res,next)
 {
@@ -57,5 +58,22 @@ const getFeed = async (req, res, next, { userId, cursor, pageSize }) => {
     }
 };
 
+async function getPost(req,res,next)
+{
+    const postId = req.params.postId;
+    try {
+        const post = await postService.getPost(postId);
 
-module.exports = {createPost, getUserPosts, getFeed}
+        res.json(200).json(post);
+
+    }
+    catch(err)
+    {
+        next(err);
+
+    }
+    return post;
+}   
+
+
+module.exports = {createPost, getUserPosts, getFeed, getPost}
