@@ -43,6 +43,12 @@ router.delete('/:postId/comments/:commentId', verifyJWT, (req,res,next) => {
 })
 
 
+// Likes
+
+router.post('/:postId/like', verifyJWT, (req,res,next) => {
+    postsController.likePost(req,res,next);
+})
+
 
 module.exports = router;
 

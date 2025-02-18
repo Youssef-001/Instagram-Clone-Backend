@@ -141,4 +141,29 @@ async function getPost(postId)
 }
 
 
-module.exports = {createPost, uploadImage, getUserPosts, getFeed, getPost};
+async function likePost(userId, postId) {
+    try {
+        console.log(userId, postId)
+        // Create the like record
+        await prisma.like.create({
+            data: {
+                userId: userId,
+                postId: postId
+            }
+        });
+
+        // Count the number of likes for the post
+        const likesCount = await prisma.like.count({
+            where: {
+                postId: postId
+            }
+        });
+
+        return { message: "Post liked successfully", postId ,likesCount };
+
+    } catch (err) {
+        throw new AppError("Post is already liked", 400);
+    }
+}
+
+module.exports = {createPost, uploadImage, getUserPosts, getFeed, getPost, likePost};

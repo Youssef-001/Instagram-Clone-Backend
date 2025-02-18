@@ -76,4 +76,21 @@ async function getPost(req,res,next)
 }   
 
 
-module.exports = {createPost, getUserPosts, getFeed, getPost}
+async function likePost(req,res,next)
+{
+    const postId = req.params.postId;
+    const userId = req.user.userId;
+
+    try {
+        const like = await postService.likePost(userId, postId);
+        res.status(200).json(like);
+    }
+    catch(err)
+    {
+        next( new AppError(err.message || "Something went wrong", err.statusCode || 500));
+    }
+
+}
+
+
+module.exports = {createPost, getUserPosts, getFeed, getPost, likePost}
