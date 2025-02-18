@@ -31,6 +31,10 @@ router.post('/:postId/comments', verifyJWT, (req,res, next) => {
     commentController.createComment(req,res,next)
 })
 
+router.get('/:postId/comments', verifyJWT, (req,res, next) => {
+    commentController.getComments(req,res,next)
+})
+
 
 
 module.exports = router;
