@@ -166,4 +166,30 @@ async function likePost(userId, postId) {
     }
 }
 
-module.exports = {createPost, uploadImage, getUserPosts, getFeed, getPost, likePost};
+async function unlikePost(userId, postId) {
+    try {
+        // Delete the like record
+        await prisma.like.delete({
+            where: {
+                userId_postId: {
+                userId: userId,
+                postId: postId
+            }}
+        });
+
+        // Count the number of likes for the post
+        const likesCount = await prisma.like.count({
+            where: {
+                postId: postId
+            }
+        });
+
+        return { message: "Post unliked successfully", postId, likesCount };
+
+    } catch (err) {
+        console.error(err)
+        throw new AppError("Post is not liked", 400);
+    }
+}
+
+module.exports = {createPost, uploadImage, getUserPosts, getFeed, getPost, likePost, unlikePost};

@@ -49,6 +49,9 @@ router.post('/:postId/like', verifyJWT, (req,res,next) => {
     postsController.likePost(req,res,next);
 })
 
+router.delete('/:postId/like', verifyJWT, (req,res,next) => {
+    postsController.unlikePost(req,res,next);
+})
 
 module.exports = router;
 
