@@ -30,4 +30,25 @@ async function createMessage(req,res,next)
 
 }
 
-module.exports = {createMessage}
+
+async function getMessages(req,res,next)
+{
+    const {user1, user2} = req.params;
+
+    try {
+        const messages = await messageService.getMessages(user1, user2);
+        res.status(200).json({
+            status: 'success',
+            data: {
+                messages: messages
+            }
+        });
+    }
+
+    catch(err)
+    {
+        next(new AppError(err.message, 400));
+    }
+}
+
+module.exports = {createMessage, getMessages}

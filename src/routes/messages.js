@@ -6,5 +6,9 @@ router.post('/:senderId/:receiverId', verifyJWT, (req,res,next) => {
     messageController.createMessage(req,res,next);
 })
 
+router.get('/:user1/:user2', verifyJWT, (req,res,next) => {
+    messageController.getMessages(req,res,next);
+})
+
 
 module.exports = router;
