@@ -17,7 +17,7 @@ passport.use(new GoogleStrategy({
     passReqToCallback   : true
   },
   async function(request, accessToken, refreshToken, profile, done) {
-   const user =  await prisma.user.findUnique({
+    let user =  await prisma.user.findUnique({
         where: {
             googleId: profile.id
         }

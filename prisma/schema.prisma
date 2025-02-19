@@ -18,8 +18,8 @@ model User {
   id        String   @id @default(cuid())
   email     String   @unique
   username      String   @unique
-  bdate DateTime
-  password String  
+  password String? 
+  googleId String? @unique
   posts     Post[]
   comments Comment[]
   sentMessages     Message[] @relation("SentMessages")
