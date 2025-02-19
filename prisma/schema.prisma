@@ -74,8 +74,10 @@ model Message {
   id String @id @default(cuid())
   senderId String
   receiverId String
+  message String
   sender     User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
   receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+
 }
 
 model Notification {
