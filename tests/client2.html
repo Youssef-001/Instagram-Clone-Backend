@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <form id="followForm">
+        <label for="username">Follow User (Username):</label>
+        <input type="text" id="username" name="username" required>
+        <button type="submit">Follow</button>
+    </form>
+
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io("http://localhost:3000");  // Initialize socket connection
+
+        const userId = 'cm7bw78110000yqkdgqa6nmfa';  // Set the userId to something unique for the sender (e.g., logged-in user)
+        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbTdidzc4MTEwMDAweXFrZGdxYTZubWZhIiwiZW1haWwiOiJwc2V1ZHNhbjc3QGdtYWlsLmNvbSIsIm5hbWUiOiJZdXN1ZiIsImlhdCI6MTc0MDA1MjAzMSwiZXhwIjoxNzQwMDU1NjMxfQ.QX-3ygFKS2EkWE_fEuMYcbgHP5c2KK19zg2Mnnm6NlM';  // Make sure to set the correct token
+
+        // Step 1: Register the user (User A) when they connect
+        socket.emit("registerUser", userId);
+
+        // Step 2: Handle form submission to follow a user
+        document.getElementById('followForm').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent default form submission
+
+            const username = event.target.username.value;  // Get the username from the input field
+
+            // Step 3: Make the API request to persist the follow
+            fetch(`http://localhost:3000/follow/${userId}/${username}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.success) {
+                    // After the API request is successful, trigger the WebSocket event
+                    socket.emit('followUser', { followerId: userId, followingId: username });
+                    alert('You followed the user!');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to follow user.');
+            });
+        });
+    </script>
+
+</body>
+</html>

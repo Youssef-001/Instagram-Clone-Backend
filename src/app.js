@@ -13,7 +13,7 @@ const session = require('express-session');
 const http = require('http');
 const { Server } = require('socket.io');
 
-const socketHandler = require('./controllers/socketHandler.js'); // Import socket handler
+const {socketHandler} = require('./controllers/socketHandler.js'); // Import socket handler
 
 const app = express();
 app.use(session({'secret':'cats'}));
