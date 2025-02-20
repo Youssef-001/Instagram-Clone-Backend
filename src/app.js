@@ -38,6 +38,7 @@ const io = new Server(server, {
 });
 
 // Call the socketHandler function to initialize sockets
+app.set('io', io);
 socketHandler(io);
 
 server.listen(3000, () => {

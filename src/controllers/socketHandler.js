@@ -14,20 +14,6 @@ const socketHandler = (io) => {
             console.log(`User ${userId} registered with socket ID ${socket.id}`);
         });
 
-        socket.on('sendMessage', async ({ senderId, receiverId, message }) => {
-            console.log(`Message from ${senderId} to ${receiverId}: ${message}`);
-            
-            const receiverSocketId = users.get(receiverId);
-            if (receiverSocketId) {
-                io.to(receiverSocketId).emit('receiveMessage', { senderId, message });
-
-                let senderName = await userService.getProfile(senderId);
-                sentNotification(receiverId, 'message', `${senderName.username} sent you a message.`);
-            } else {
-                console.log(`User ${receiverId} is not online.`);
-            }
-        });
-
         socket.on('disconnect', () => {
             console.log('User disconnected:', socket.id);
             users.forEach((socketId, userId) => {
@@ -39,31 +25,42 @@ const socketHandler = (io) => {
     });
 };
 
-// **Export follow notification function**
-const emitFollowNotification = async (followerId, followingId) => {
+// **Generalized notification function**
+const sendNotification = async (receiverId, type, senderId, extraData = {}) => {
     if (!ioInstance) {
         console.error('Socket.io instance not initialized.');
         return;
     }
 
-    const followingSocketId = users.get(followingId);
+    const receiverSocketId = users.get(receiverId);
+    if (!receiverSocketId) {
+        console.log(`User ${receiverId} is not online, notification missed.`);
+        return;
+    }
 
-    if (followingSocketId) {
-        try {
-            const senderName = await userService.getProfile(followerId);
+    try {
+        const senderProfile = await userService.getProfile(senderId);
+        const message = generateNotificationMessage(type, senderProfile.username, extraData);
 
-            ioInstance.to(followingSocketId).emit('receiveFollow', {
-                message: `${senderName.username} followed you!`
-            });
-
-            sentNotification(followingId, 'follow', `${senderName.username} followed you!`);
-        } catch (error) {
-            console.error('Error fetching follower profile:', error);
-        }
-    } else {
-        console.log(`User ${followingId} is not online, follow notification missed.`);
+        ioInstance.to(receiverSocketId).emit('notification', { type, message });
+    } catch (error) {
+        console.error('Error sending notification:', error);
     }
 };
 
-// **Export the function**
-module.exports = { socketHandler, emitFollowNotification };
+// **Helper function to generate notification messages**
+const generateNotificationMessage = (type, senderName, extraData) => {
+    switch (type) {
+        case 'follow':
+            return `${senderName} followed you!`;
+        case 'like':
+            return `${senderName} liked your post!`;
+        case 'message':
+            return `${senderName} sent you a message: "${extraData.message}"`;
+        default:
+            return `${senderName} sent you a notification.`;
+    }
+};
+
+// **Export functions**
+module.exports = { socketHandler, sendNotification };

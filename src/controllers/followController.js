@@ -1,5 +1,5 @@
 const followService = require('../services/followService');
-const { emitFollowNotification } = require('../controllers/socketHandler');
+const { sendNotification } = require('../controllers/socketHandler');
 
 async function followUser(req, res, next) {
     const senderId = req.params.senderId;
@@ -8,8 +8,8 @@ async function followUser(req, res, next) {
     try {
         const follow = await followService.followUser(senderId, receiverId);
         
-        // Send real-time follow notification
-        emitFollowNotification(senderId, receiverId);
+        // Send follow notification
+        sendNotification(receiverId, 'follow', senderId);
 
         res.status(200).json(follow);
     } catch (err) {
