@@ -10,5 +10,10 @@ router.get('/:user1/:user2', verifyJWT, (req,res,next) => {
     messageController.getMessages(req,res,next);
 })
 
+router.delete('/:messageId', verifyJWT, (req,res,next) => {
+    messageController.deleteMessage(req,res,next);
+
+})
+
 
 module.exports = router;

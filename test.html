@@ -1,0 +1,21 @@
+<script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+<script>
+    const socket = io("http://localhost:3000");
+
+    // Register user after login
+    const userId = "user123"; // Replace with actual user ID
+    socket.emit("registerUser", userId);
+
+    // Send a message
+    function sendMessage(receiverId, message) {
+        socket.emit("sendMessage", { senderId: userId, receiverId, message });
+    }
+
+    // Listen for incoming messages
+    socket.on("receiveMessage", (data) => {
+        console.log(`Message from ${data.senderId}: ${data.message}`);
+    });
+
+    // Example usage
+    sendMessage("user456", "Hello!");
+</script>

@@ -51,4 +51,27 @@ async function getMessages(req,res,next)
     }
 }
 
-module.exports = {createMessage, getMessages}
+async function deleteMessage(req,res,next)
+{
+    const {messageId} = req.params;
+    const senderId = req.query.senderId;
+
+    if (senderId != req.user.id)
+    {
+        return next(new AppError("You are not authorized to delete this message", 401));
+    }
+
+    try {
+        await messageService.deleteMessage(senderId, messageId);
+        res.status(204).json({
+            status: 'success',
+        });
+    }
+
+    catch(err)
+    {
+        next(new AppError(err.message, 400));
+    }
+}
+
+module.exports = {createMessage, getMessages, deleteMessage}

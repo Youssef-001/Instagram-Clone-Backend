@@ -55,4 +55,16 @@ async function getMessages(user1, user2) {
 }
 
 
-module.exports = {createMessage, getMessages}
+async function deleteMessage(senderId, messageId)
+{
+    await prisma.message.delete({
+        where: {
+            id: messageId
+        }
+    });
+
+    return;
+}
+
+
+module.exports = {createMessage, getMessages,deleteMessage}
