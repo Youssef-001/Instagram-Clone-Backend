@@ -13,5 +13,8 @@ router.patch('/:userId/password',verifyJwt, (req,res,next) => {
     userController.updatePassword(req,res,next)
 })
 
+router.get('/:userId/profile', (req,res,next) => {
+    userController.getProfile(req,res,next);
+})
 
 module.exports = router;

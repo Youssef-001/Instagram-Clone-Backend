@@ -61,6 +61,26 @@ async function updateProfile(userId, bio, avatar)
     return profile;
 }
 
+async function getProfile(userId) {
+    return await prisma.user.findUnique({
+        where: {
+            id: userId
+        },
+        select: {
+            id: true,
+            username: true,
+            bio: true,
+            avatar: true,
+            _count: {
+                select: {
+                    followers: true,   // Count of followers
+                    following: true    // Count of following users
+                }
+            }
+        }
+    });
+}
 
-module.exports = {createUser,findUserByEmail,updateProfile}
+
+module.exports = {createUser,findUserByEmail,updateProfile,getProfile}
 
