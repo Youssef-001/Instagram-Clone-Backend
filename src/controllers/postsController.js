@@ -5,6 +5,7 @@ const postService = require('../services/postService.js');
 const prisma = require('@prisma/client');
 const { post } = require('../routes/posts.js');
 const prismaClient = new prisma.PrismaClient();
+const notificationService = require('../services/notificationService.js')
 async function createPost(req,res,next)
 {
     const content = req.body.content || "";
@@ -83,6 +84,9 @@ async function likePost(req,res,next)
 
     try {
         const like = await postService.likePost(userId, postId);
+        let post = await postService.getPost(postId);
+        let receiverId = post.author.id;
+        const notification = await notificationService.createNotification(userId, receiverId, "LIKE");
         res.status(200).json(like);
     }
     catch(err)
