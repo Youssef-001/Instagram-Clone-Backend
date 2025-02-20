@@ -45,8 +45,22 @@ async function findUserByEmail(email)
 
 
 
+async function updateProfile(userId, bio, avatar)
+{
+    const profile = await prisma.user.update({
+        where: {
+            id: userId
+        },
+
+        data: {
+            bio: bio,
+            avatar: avatar
+        }
+    })
+
+    return profile;
+}
 
 
-
-module.exports = {createUser,findUserByEmail}
+module.exports = {createUser,findUserByEmail,updateProfile}
 

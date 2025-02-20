@@ -6,6 +6,7 @@ const authenticationRouter = require('./routes/auth.js')
 const postsRouter = require('./routes/posts.js');
 const followRouter = require('./routes/follow.js');
 const messageRouter = require('./routes/messages.js')
+const usersRouter = require('./routes/users.js')
 const passport = require('passport');
 const session = require('express-session');
 const http = require('http');
@@ -27,6 +28,7 @@ app.use('/auth', authenticationRouter);
 app.use('/posts', postsRouter);
 app.use('/follow', followRouter);
 app.use('/messages', messageRouter);
+app.use('/users', usersRouter);
 app.use(errorHandler);
 
 

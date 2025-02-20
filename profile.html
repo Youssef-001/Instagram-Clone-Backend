@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Profile</title>
+</head>
+<body>
+    <h1>Update Profile</h1>
+    <form id="profileForm" enctype="multipart/form-data">
+        <label for="bio">Bio:</label>
+        <input type="text" id="bio" name="bio"><br><br>
+        
+        <label for="avatar">Avatar:</label>
+        <input type="file" id="avatar" name="avatar"><br><br>
+        
+        <button type="submit">Update Profile</button>
+    </form>
+
+    <script>
+        document.getElementById('profileForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    const form = event.target;
+    const formData = new FormData(form);
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbTdidzc4MTEwMDAweXFrZGdxYTZubWZhIiwiZW1haWwiOiJwc2V1ZHNhbjc3QGdtYWlsLmNvbSIsIm5hbWUiOiJZdXN1ZiIsImlhdCI6MTc0MDAzNTY3NiwiZXhwIjoxNzQwMDM5Mjc2fQ.OXu6UMVIvysF41rrx-jj6GCdY62TG1TUipy7wN7-Xdc';
+            console.log(formData)
+    fetch('http://localhost:3000/users/cm7bw78110000yqkdgqa6nmfa/profile', {
+        method: 'PATCH',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        alert('Profile updated successfully!');
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to update profile.');
+    });
+});
+
+    </script>
+</body>
+</html>
