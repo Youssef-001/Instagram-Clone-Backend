@@ -8,21 +8,13 @@ const prisma = new PrismaClient()
 const jwt = require('jsonwebtoken')
 require('../utils/googlAuth.js')
 const passport = require('passport')
-router.post('/signup', (req, res, next) => {
-    authController.signup(req, res,next);
-})
 
-router.post('/login', (req,res,next) => {
-    authController.login(req,res,next);
-})
+
 
 
 router.get('/admin', verifyJWT,(req,res,next) => {
     res.send("Hallo, you are difinitely authenticated (: ");
 })
-
-
-
 
 router.get('/google', (req,res) => {
     res.send('<a href="/auth/google-auth"> Auhenticate with google </a>');
