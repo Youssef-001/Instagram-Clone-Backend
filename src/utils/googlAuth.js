@@ -23,18 +23,18 @@ passport.use(new GoogleStrategy({
         }
     })
 
-    console.log(profile);
 
 
     if (!user)
     {
-         user = await prisma.user.create({
-            data: {
-                googleId: profile.id,
-                email: profile.email,
-                username: profile.displayName,
-            }
-        })
+        //  user = await prisma.user.create({
+        //     data: {
+        //         googleId: profile.id,
+        //         email: profile.email,
+        //         username: profile.displayName,
+        //     }
+        // })
+        return done(null, { googleId: profile.id, email: profile.email, isNew: true });
     }
         const jwtToken = jwt.sign(
             { userId: user.id, email: user.email, name:user.username }, // Payload (you can include any user info)

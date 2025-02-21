@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+
+    <form action="/auth/google/signup" method="POST">
+        <label for="username">Username</label>
+        <input type="text" name="username">
+
+    </form>
+
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const email = urlParams.get('email');
+    const googleId = urlParams.get('googleId');
+
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const username = form.querySelector('input[name="username"]').value; // Get the username input value
+
+        // Prepare the data to send
+        const data = {
+            googleId,
+            email,
+            username
+        };
+
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',  // Set content type to JSON
+            },
+            body: JSON.stringify(data)  // Send the data as JSON
+        }).then(response => {
+            if (response.ok) {
+                window.location.href = '/success';  // Redirect on success
+            } else {
+                alert('Error submitting form');
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+            alert('Error submitting form');
+        });
+    });
+});
+
+    </script>
+    
+</body>
+</html>

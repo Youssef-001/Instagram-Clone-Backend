@@ -5,20 +5,29 @@ const jsonwebtoken = require('jsonwebtoken')
 require('dotenv').config();
 
 async function signup(req, res, next) {
-    try {
-        const { email, username, password, bdate } = req.body;
+    const { googleId, email, username } = req.body;
 
-        // Hash the password using async/await
-        const hashedPassword = await bcrypt.hash(password, 10);
+    // Check if username is already taken
+    const existingUser = await prisma.user.findUnique({
+        where: { username }
+    });
 
-        // Create user
-        const user = await userService.createUser(email, username, bdate, hashedPassword);
-
-        console.log(user);
-        res.status(200).json(user);
-    } catch (err) {
-        next(err);
+    if (existingUser) {
+        return res.status(400).json({ message: "Username already taken" });
     }
+
+    // Create new user with googleId, email, and chosen username
+   const user = await userService.createUser(googleId, email, username);
+
+    // Generate JWT for the new user
+    const jwtToken = jwt.sign(
+        { userId: user.id, email: user.email, name: user.username },
+        process.env.JWT_SECRET,
+        { expiresIn: '1h' }
+    );
+
+    // Return the JWT so the frontend can store and authenticate the user
+    res.json({ message: "Username set successfully", jwtToken })
 }
 
 

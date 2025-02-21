@@ -17,20 +17,24 @@ datasource db {
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
-  username      String   @unique
-  password String? 
-  googleId String? @unique
+  username  String   @unique
+  googleId  String   @unique
+
   posts     Post[]
-  comments Comment[]
+  comments  Comment[]
+  
   sentMessages     Message[] @relation("SentMessages")
   receivedMessages Message[] @relation("ReceivedMessages")
+
   sentNotifications     Notification[] @relation("SentNotifications")
   receivedNotifications Notification[] @relation("ReceivedNotifications")
+
   likes     Like[] 
   followers Follow[] @relation("Followers")
   following Follow[] @relation("Following")
-  avatar String? 
-  bio String?
+
+  avatar    String? 
+  bio       String?
   createdAt DateTime @default(now())
 }
 
