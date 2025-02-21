@@ -16,7 +16,7 @@ async function createComment(req, res, next) {
     try {
         const comment = await commentService.createComment(postId, userId, parentId, content);
         const post = await postService.getPost(postId);
-        const notification = await notificationService.createNotification(userId, post.author.id, "LIKE", postId)
+        const notification = await notificationService.createNotification(userId, post.author.id, "COMMENT", postId)
         res.status(201).json({ message: "Comment created successfully", comment });
     } catch (err) {
         next(new AppError(err.message || "Something went wrong", err.statusCode || 500)); // Pass error to middleware

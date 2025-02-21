@@ -1,7 +1,9 @@
 const userService = require('../services/userService.js');
 const AppError = require('../utils/AppError.js');
 const bcrypt = require('bcryptjs');
-const jsonwebtoken = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient()
 require('dotenv').config();
 
 async function signup(req, res, next) {
@@ -17,7 +19,7 @@ async function signup(req, res, next) {
     }
 
     // Create new user with googleId, email, and chosen username
-   const user = await userService.createUser(googleId, email, username);
+   const user = await userService.createUser(googleId, email, username)
 
     // Generate JWT for the new user
     const jwtToken = jwt.sign(
@@ -45,7 +47,7 @@ async function login(req,res,next)
             throw new AppError("Invalid password", 401);
         }
 
-        const token = jsonwebtoken.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, {
+        const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, {
             expiresIn: '1h'
         });
 

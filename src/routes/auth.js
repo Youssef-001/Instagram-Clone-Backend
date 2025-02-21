@@ -3,9 +3,7 @@ const express = require('express');
 const verifyJWT = require('../middlewares/verifyJwt.js');
 const router = express.Router();
 const { PrismaClient } = require('@prisma/client');
-const AppError = require('../utils/AppError.js');
-const prisma = new PrismaClient()
-const jwt = require('jsonwebtoken')
+
 require('../utils/googlAuth.js')
 const passport = require('passport')
 
