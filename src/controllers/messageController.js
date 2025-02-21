@@ -1,7 +1,7 @@
 
 const AppError = require('../utils/AppError');
 const messageService = require('../services/messageService');
-
+const notificationService = require('../services/notificationService')
 async function createMessage(req,res,next)
 {
     const {senderId, receiverId} = req.params;
@@ -14,6 +14,8 @@ async function createMessage(req,res,next)
 
     try {
         const newMessage = await messageService.createMessage(senderId, receiverId, message);
+        const notification = await notificationService.createNotification(senderId, receiverId, "MESSAGE", newMessage.id);
+
         res.status(201).json({
             status: 'success',
             data: {

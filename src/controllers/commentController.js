@@ -2,6 +2,7 @@ const AppError = require('../utils/AppError.js');
 const commentService = require('../services/commentService.js');
 const postController = require('../controllers/postsController.js');
 const postService = require('../services/postService.js');
+const notificationService = require('../services/notificationService.js')
 async function createComment(req, res, next) {
     const postId = req.params.postId;
     const content = req.body.content;
@@ -14,6 +15,8 @@ async function createComment(req, res, next) {
 
     try {
         const comment = await commentService.createComment(postId, userId, parentId, content);
+        const post = await postService.getPost(postId);
+        const notification = await notificationService.createNotification(userId, post.author.id, "LIKE", postId)
         res.status(201).json({ message: "Comment created successfully", comment });
     } catch (err) {
         next(new AppError(err.message || "Something went wrong", err.statusCode || 500)); // Pass error to middleware

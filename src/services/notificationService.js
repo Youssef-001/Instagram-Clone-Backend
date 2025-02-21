@@ -4,14 +4,15 @@ const AppError = require('../utils/AppError.js');
 const prisma = new PrismaClient()
 
 
-async function createNotification(senderId, receiverId, notificationType)
+async function createNotification(senderId, receiverId, notificationType, target)
 {
 
     let notification = await prisma.notification.create({
         data: {
             userId: receiverId,
             senderId: senderId,
-            type: notificationType
+            type: notificationType,
+            targetId: target
         }
     })
 

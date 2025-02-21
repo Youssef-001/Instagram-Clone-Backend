@@ -7,7 +7,7 @@ async function followUser(req, res, next) {
     
     try {
         const follow = await followService.followUser(senderId, receiverId);
-        let notification = await notificationService.createNotification(senderId, receiverId, "FOLLOW");        
+        let notification = await notificationService.createNotification(senderId, receiverId, "FOLLOW", null);        
         // Send follow notification
         sendNotification(receiverId, 'follow', senderId);
 

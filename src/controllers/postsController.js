@@ -86,7 +86,7 @@ async function likePost(req,res,next)
         const like = await postService.likePost(userId, postId);
         let post = await postService.getPost(postId);
         let receiverId = post.author.id;
-        const notification = await notificationService.createNotification(userId, receiverId, "LIKE");
+        const notification = await notificationService.createNotification(userId, receiverId, "LIKE", postId);
         res.status(200).json(like);
     }
     catch(err)

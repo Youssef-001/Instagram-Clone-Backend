@@ -88,6 +88,7 @@ model Notification {
   createdAt DateTime @default(now())
   userId    String
   senderId    String
+  targetId   String?
   user      User             @relation("ReceivedNotifications", fields: [userId], references: [id])
   sender    User             @relation("SentNotifications", fields: [senderId], references: [id])
 }
