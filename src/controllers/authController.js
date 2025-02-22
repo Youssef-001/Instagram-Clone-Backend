@@ -9,10 +9,14 @@ require('dotenv').config();
 async function signup(req, res, next) {
     const { googleId, email, username } = req.body;
 
+    console.log(req.body)
+
     // Check if username is already taken
     const existingUser = await prisma.user.findUnique({
         where: { username }
     });
+
+    console.log(existingUser);
 
     if (existingUser) {
         return res.status(400).json({ message: "Username already taken" });
@@ -28,8 +32,11 @@ async function signup(req, res, next) {
         { expiresIn: '1h' }
     );
 
+
+    console.log(jwtToken);
+
     // Return the JWT so the frontend can store and authenticate the user
-    res.json({ message: "Username set successfully", jwtToken })
+    res.status(200).json({ message: "Username set successfully", jwtToken })
 }
 
 
